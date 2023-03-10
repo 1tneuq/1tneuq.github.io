@@ -1,67 +1,64 @@
 <?php
 
-//Retrieve form data. 
-//GET - user submitted data using AJAX
-//POST - in case user does not support javascript, we'll use POST instead
+//GET - donnees entrees par l'utilisateur, avec Ajax
+//POST - si le navigateur de l'utilisateur ne supporte pas le js on utilisera post a la place
 $name = ($_GET['name']) ? $_GET['name'] : $_POST['name'];
 $email = ($_GET['email']) ?$_GET['email'] : $_POST['email'];
 $comment = ($_GET['comment']) ?$_GET['comment'] : $_POST['comment'];
 
-//flag to indicate which method it uses. If POST set it to 1
+//flag pr savoir quelle methode utiliser (post = 1)
 
 if ($_POST) $post=1;
 
-//Simple server side validation for POST data, of course, you should validate the email
-if (!$name) $errors[count($errors)] = 'Please enter your name.';
-if (!$email) $errors[count($errors)] = 'Please enter your email.'; 
-if (!$comment) $errors[count($errors)] = 'Please enter your message.'; 
+//validation des donnees recues
+if (!$name) $errors[count($errors)] = 'Merci d\'entrer votre nom';
+if (!$email) $errors[count($errors)] = 'Merci d\'entrer votre email.';
+if (!$comment) $errors[count($errors)] = 'Merci d\'entrer un message';
 
-//if the errors array is empty, send the mail
+//si le tableau d'erreurs est vide, on envoie le mail
 if (!$errors) {
 
-	//recipient - replace your email here
-	$to = 'wowthemesnet@gmail.com';	
-	//sender - from the form
+	//destinataire
+	$to = 'quentinlacpro@gmail.com';
+	//expéditeur
 	$from = $name . ' <' . $email . '>';
-	
-	//subject and the html message
-	$subject = 'Message via Aries from ' . $name;	
-	$message = 'Name: ' . $name . '<br/><br/>
-		       Email: ' . $email . '<br/><br/>		
+
+	//sujet et contenu du message en html
+	$subject = 'Message via le portfolio de ' . $name;
+	$message = 'Nom: ' . $name . '<br/><br/>
+		       Email: ' . $email . '<br/><br/>
 		       Message: ' . nl2br($comment) . '<br/>';
 
-	//send the mail
+	//Envoyer le mail
 	$result = sendmail($to, $subject, $message, $from);
-	
-	//if POST was used, display the message straight away
+
+	//Si on a utilisé post, affichage de message
 	if ($_POST) {
-		if ($result) echo 'Thank you! We have received your message.';
-		else echo 'Sorry, unexpected error. Please try again later';
-		
-	//else if GET was used, return the boolean value so that 
-	//ajax script can react accordingly
-	//1 means success, 0 means failed
+		if ($result) echo 'Merci ! Votre message m\'est bien parvenu.';
+		else echo 'Une erreur s\'est produite. Veuillez réessayer.';
+
+	//si GET a été utilisé, on renvoie un booleen pour que le script Ajax s'execute
 	} else {
-		echo $result;	
+		echo $result;
 	}
 
-//if the errors array has values
+//si le tableau d'erreurs est rempli
 } else {
-	//display the errors message
+	//affichage des erreurs
 	for ($i=0; $i<count($errors); $i++) echo $errors[$i] . '<br/>';
-	echo '<a href="index.html">Back</a>';
+	echo '<a href="index.html">Retour</a>';
 	exit;
 }
 
 
-//Simple mail function with HTML header
+//Fonction pour generer l'email en html
 function sendmail($to, $subject, $message, $from) {
 	$headers = "MIME-Version: 1.0" . "\r\n";
 	$headers .= "Content-type:text/html;charset=iso-8859-1" . "\r\n";
-	$headers .= 'From: ' . $from . "\r\n";
-	
+	$headers .= 'De: ' . $from . "\r\n";
+
 	$result = mail($to,$subject,$message,$headers);
-	
+
 	if ($result) return 1;
 	else return 0;
 }

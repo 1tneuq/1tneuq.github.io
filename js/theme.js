@@ -1,4 +1,4 @@
-// jQuery to collapse the navbar on scroll
+// jQuery pour attacher la barre de navigation quand on scrolle
 $(window).scroll(function() {
     if ($(".navbar").offset().top > 50) {
         $(".navbar-fixed-top").addClass("top-nav-collapse");
@@ -7,7 +7,7 @@ $(window).scroll(function() {
     }
 });
 
-// jQuery for page scrolling feature - requires jQuery Easing plugin
+// jquery pour l'option de scroll - utilise le plugin Easy de JQuery
 $(function() {
     $('a.page-scroll').bind('click', function(event) {
         var $anchor = $(this);
@@ -18,8 +18,7 @@ $(function() {
     });
 });
 
-// Closes the Responsive Menu on Menu Item Click
+// Ferme le menu burger responsive
 $('.navbar-collapse ul li a').click(function() {
     $('.navbar-toggle:visible').click();
 });
-
